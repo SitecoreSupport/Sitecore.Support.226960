@@ -10,19 +10,26 @@
     {
         public override Image GetImage()
         {
-            MediaStream stream = this.GetStream();
-
-            if (stream == null)
+            Image img;
+            using (MediaStream stream = this.GetStream())
             {
-                return null;
-            }
+                if (stream == null)
+                {
+                    return null;
+                }
 
-            if (stream.Stream.Length == 0)
-            {
-                return null;
-            }
+                if (stream.Stream.Length == 0)
+                {
+                    return null;
+                }
 
-            return Image.FromStream(stream.Stream);
+                using (Image temp = Image.FromStream(stream.Stream))
+                {
+                    img = new Bitmap(temp);
+                }
+
+                return img;
+            }
         }
     }
 }
